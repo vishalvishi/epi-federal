@@ -985,24 +985,26 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
           },
         });
       }
-      const $inp = $(".otp_input");
-      $inp.on({
-      paste(ev) { // Handle Pasting
-    const clip = ev.originalEvent.clipboardData.getData('text').trim();
-    // Allow numbers only
-    if (!/\d{6}/.test(clip)) return ev.preventDefault(); // Invalid. Exit here
-    // Split string to Array or characters
-    const s = [...clip];
-    // Populate inputs. Focus last input.
-    $inp.val(i => s[i]).eq(5).focus(); 
+const $inp = $(".ap-otp-input");
+$inp.on({
+  paste(ev) { // Handle Pasting    const clip = ev.originalEvent.clipboardData.getData('text').trim();
+    // Allow numbers only    if (!/\d{6}/.test(clip)) return ev.preventDefault(); // Invalid. Exit here    // Split string to Array or characters    const s = [...clip];
+    // Populate inputs. Focus last input.    $inp.val(i => s[i]).eq(5).focus(); 
   },
-  input(ev) { // Handle typing
-    
-    const i = $inp.index(this);
-    if (this.value) $inp.eq(i + 1).focus();
+  input(ev) { // Handle typing and pasting    const i = $inp.index(this);
+    if (ev.originalEvent.inputType === 'insertFromPaste') {
+      // if text is pasted      const pasteText = ev.target.value;
+      if (!/\d{6}/.test(pasteText)) {
+        ev.preventDefault();
+      } else {
+        const s = [...pasteText];
+        $inp.val(i => s[i]).eq(5).focus(); 
+      }
+    } else {
+      // if text is typed      if (this.value) $inp.eq(i + 1).focus();
+    }
   },
-  keydown(ev) { // Handle Deleting
-    const i = $inp.index(this);
+  keydown(ev) { // Handle Deleting    const i = $inp.index(this);
     if (!this.value && ev.key === "Backspace" && i) $inp.eq(i - 1).focus();
   }
 });
