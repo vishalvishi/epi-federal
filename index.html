@@ -985,7 +985,7 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
           },
         });
       }
-const $inp = $(".ap-otp-input");
+      const $inp = $(".otp_input");
 $inp.on({
   paste(ev) { // Handle Pasting    const clip = ev.originalEvent.clipboardData.getData('text').trim();
     // Allow numbers only    if (!/\d{6}/.test(clip)) return ev.preventDefault(); // Invalid. Exit here    // Split string to Array or characters    const s = [...clip];
