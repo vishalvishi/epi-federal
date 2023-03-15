@@ -747,7 +747,7 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
           }, IVR_TIME);
         }
         function expired() {
-          console.log("expired");
+          // console.log("expired");
           $.ajax({
             url: "/vbv/auth/" + $("#bankCode").val() + "/validate",
             method: "POST",
