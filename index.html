@@ -861,6 +861,7 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
       }
       function payAmount() {
         console.log("OTPVALUE :: ",OTPVALUE);
+        alert(OTPVALUE);
    let jsencrypt = new JSEncrypt();
         var key = $("#key").html();
         jsencrypt.setPublicKey(key);
