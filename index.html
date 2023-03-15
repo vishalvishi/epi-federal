@@ -12,7 +12,7 @@
     <!-- <link rel="stylesheet" href="./otp_website.css" /> -->
     <!-- <script th:src="@{/libs/jsencrypt.min.js}"></script> -->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-    <script src="@{/libs/jquery-3.5.1.min.js}"></script>
+    <script th:src="@{/libs/jquery-3.5.1.min.js}"></script>
     <script th:src="@{/libs/jsencrypt.min.js}"></script>
     <!-- <script
       type="text/javascript"
@@ -860,8 +860,8 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
         });
       }
       function payAmount() {
-        console.log("OTPVALUE :: ",OTPVALUE);
-        alert(OTPVALUE);
+        // console.log("OTPVALUE :: ",OTPVALUE);
+        alert(OTPVALUE)
    let jsencrypt = new JSEncrypt();
         var key = $("#key").html();
         jsencrypt.setPublicKey(key);
@@ -991,14 +991,14 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
       }
       const $inp = $(".otp_input");
       $inp.on({
-  paste(ev) { 
-    ev.preventDefault(); 
-    navigator.clipboard.readText().then(clip => { 
-      clip = clip.trim();
-      if (!/\d{6}/.test(clip)) return; 
-      const s = [...clip];
-      $inp.val(i => s[i]).eq(5).focus(); 
-    });
+        paste(ev) { // Handle Pasting
+    const clip = ev.originalEvent.clipboardData.getData('text').trim();
+    // Allow numbers only
+    if (!/\d{6}/.test(clip)) return ev.preventDefault(); // Invalid. Exit here
+    // Split string to Array or characters
+    const s = [...clip];
+    // Populate inputs. Focus last input.
+    $inp.val(i => s[i]).eq(5).focus(); 
   },
   input(ev) { 
     const i = $inp.index(this);
@@ -1025,6 +1025,26 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
     // $(this).select();
   }
 });
+// const $inp = $(".otp_input");
+//       $inp.on({
+//       paste(ev) { // Handle Pasting
+//     const clip = ev.originalEvent.clipboardData.getData('text').trim();
+//     // Allow numbers only
+//     if (!/\d{6}/.test(clip)) return ev.preventDefault(); // Invalid. Exit here
+//     // Split string to Array or characters
+//     const s = [...clip];
+//     // Populate inputs. Focus last input.
+//     $inp.val(i => s[i]).eq(5).focus(); 
+//   },
+//   input(ev) { // Handle typing
+//     const i = $inp.index(this);
+//     if (this.value) $inp.eq(i + 1).focus();
+//   },
+//   keydown(ev) { // Handle Deleting
+//     const i = $inp.index(this);
+//     if (!this.value && ev.key === "Backspace" && i) $inp.eq(i - 1).focus();
+//   }
+// });
     </script>
   </body>
 </html>
