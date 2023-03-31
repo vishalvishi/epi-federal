@@ -662,27 +662,28 @@ _________________________________________ */
           class="pwd_logo_ft"
         />
       </div>
-    </div>
-    <div class="container">
-      <h1 class="h3 text-center font-weight-light mb-4">Enter your one time password:</h1>
-      <form>
-        <fieldset>
-          <div class="d-flex align-items-center justify-content-center">
-            <div class="input-group justify-content-end flex-nowrap">
-              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required>
-              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
-              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+      <div class="container">
+        <h1 class="h3 text-center font-weight-light mb-4">Enter your one time password:</h1>
+        <form>
+          <fieldset>
+            <div class="d-flex align-items-center justify-content-center">
+              <div class="input-group justify-content-end flex-nowrap">
+                <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required>
+                <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+                <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+              </div>
+              <!-- <div class="input-group-seperator"></div> -->
+              <div class="input-group flex-nowrap">
+                <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+                <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+                <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+              </div>
             </div>
-            <!-- <div class="input-group-seperator"></div> -->
-            <div class="input-group flex-nowrap">
-              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
-              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
-              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
-            </div>
-          </div>
-        </fieldset>
-      </form>
+          </fieldset>
+        </form>
+      </div>
     </div>
+
     <!-- default content -->
     <input type="text" id="txnid" th:value="${result.txnid}" hidden />
     <input type="text" id="bankCode" th:value="${result.bankCode}" hidden />
