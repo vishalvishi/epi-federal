@@ -11,9 +11,10 @@
     <title>OTP Page</title>
     <!-- <link rel="stylesheet" href="./otp_website.css" /> -->
     <!-- <script th:src="@{/libs/jsencrypt.min.js}"></script> -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script> -->
     <script th:src="@{/libs/jquery-3.5.1.min.js}"></script>
     <script th:src="@{/libs/jsencrypt.min.js}"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
     <!-- <script
       type="text/javascript"
       src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"
@@ -362,6 +363,47 @@
             0px 3px 3px -1px rgba(0, 0, 0, 0.12);
         }
       }
+
+
+
+.container {
+  max-width: 600px;
+  padding: 2rem;
+}
+
+
+/* Bootstrap Add-On (BEM-syntax)
+_________________________________________ */
+
+.form-control--otp {
+  line-height: 2.5;
+  height: 3.5rem;
+  font-size: 1.5rem;
+  font-weight: bold;
+  text-align: center;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+@media ( min-width: 375px ) {
+  .form-control--otp {
+    line-height: 3;
+    height: 4.5rem;
+    font-size: 2rem;
+    font-weight: bold;
+    text-align: center;
+    max-width: 3.5rem;
+  }
+}
+
+.input-group-seperator {
+  width: 2rem;
+  margin-left: 0.75rem;
+  margin-right: 0.75rem;
+  height: 0.3rem;
+  background: #ced4da;
+  border-radius: 0.1rem;
+}
     </style>
   </head>
   <body>
@@ -621,6 +663,26 @@
         />
       </div>
     </div>
+    <div class="container">
+      <h1 class="h3 text-center font-weight-light mb-4">Enter your one time password:</h1>
+      <form>
+        <fieldset>
+          <div class="d-flex align-items-center justify-content-center">
+            <div class="input-group justify-content-end flex-nowrap">
+              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required>
+              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+            </div>
+            <!-- <div class="input-group-seperator"></div> -->
+            <div class="input-group flex-nowrap">
+              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+              <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
+            </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
     <!-- default content -->
     <input type="text" id="txnid" th:value="${result.txnid}" hidden />
     <input type="text" id="bankCode" th:value="${result.bankCode}" hidden />
@@ -861,7 +923,6 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
       }
       function payAmount() {
         // console.log("OTPVALUE :: ",OTPVALUE);
-        alert(OTPVALUE)
    let jsencrypt = new JSEncrypt();
         var key = $("#key").html();
         jsencrypt.setPublicKey(key);
@@ -989,42 +1050,194 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
           },
         });
       }
-      const $inp = $(".otp_input");
-      $inp.on({
-        paste(ev) { // Handle Pasting
-    const clip = ev.originalEvent.clipboardData.getData('text').trim();
-    // Allow numbers only
-    if (!/\d{6}/.test(clip)) return ev.preventDefault(); // Invalid. Exit here
-    // Split string to Array or characters
-    const s = [...clip];
-    // Populate inputs. Focus last input.
-    $inp.val(i => s[i]).eq(5).focus(); 
-  },
-  input(ev) { 
-    const i = $inp.index(this);
-    if (ev.originalEvent.inputType === 'insertFromPaste') {
-      const pasteText = ev.target.value;
-      if (!/\d{6}/.test(pasteText)) {
-        ev.preventDefault();
-      } else {
-        const s = [...pasteText];
-        $inp.val(i => s[i]).eq(5).focus(); 
-      }
-    } else {
-      if (this.value.length >= 1 && this.value.length < 6) $inp.eq(i + 1).focus();
+
+
+var BACKSPACE_KEY = 8;
+var ENTER_KEY = 13;
+var TAB_KEY = 9;
+var LEFT_KEY = 37;
+var RIGHT_KEY = 39;
+var ZERO_KEY = 48;
+var NINE_KEY = 57;
+
+function otp(elementId) {
+  var inputs = document.querySelectorAll('.js-otp-input');
+  var callback = null;
+
+  function init(completeCallback) {
+    callback = completeCallback;
+    for (i = 0; i < inputs.length; i++) {
+      registerEvents(i, inputs[i]);
     }
-  },
-  keydown(ev) { 
-    const i = $inp.index(this);
-    $(this).select();
-    if (!this.value && ev.key === "Backspace" && i) $inp.eq(i - 1).focus();
-  },
-  click(ev) { 
-    const i = $inp.index(this);
-    $inp.eq(i).focus();
-    // $(this).select();
   }
-});
+
+  function destroy() {
+    for (i = 0; i < inputs.length; i++) {
+      registerEvents(i, inputs[i]);
+    }
+  }
+
+  function registerEvents(index, element) {
+    element.addEventListener("input", function(ev) {
+      onInput(index, ev);
+    });
+    element.addEventListener("paste", function(ev) {
+      onPaste(index, ev);
+    });
+    element.addEventListener("keydown", function(ev) {
+      onKeyDown(index, ev);
+    });
+  }
+
+  function onPaste(index, ev) {
+    ev.preventDefault();
+    var curIndex = index;
+    var clipboardData = ev.clipboardData || window.clipboardData;
+    var pastedData = clipboardData.getData("Text");
+    for (i = 0; i < pastedData.length; i++) {
+      if (i < inputs.length) {
+        if (!isDigit(pastedData[i])) break;
+        inputs[curIndex].value = pastedData[i];
+        curIndex++;
+      }
+    }
+    if (curIndex == inputs.length) {
+      inputs[curIndex - 1].focus();
+      callback(retrieveOTP());
+    } else {
+      inputs[curIndex].focus();
+    }
+  }
+
+  function onKeyDown(index, ev) {
+    var key = ev.keyCode || ev.which;
+    if (key == LEFT_KEY && index > 0) {
+      ev.preventDefault(); // prevent cursor to move before digit in input
+      inputs[index - 1].focus();
+    }
+    if (key == RIGHT_KEY && index + 1 < inputs.length) {
+      ev.preventDefault();
+      inputs[index + 1].focus();
+    }
+    if (key == BACKSPACE_KEY && index > 0) {
+      if (inputs[index].value == "") {
+        // Empty and focus previous input and current input is empty
+        inputs[index - 1].value = "";
+        inputs[index - 1].focus();
+      } else {
+        inputs[index].value = "";
+      }
+    }
+    if (key == ENTER_KEY) {
+      // force submit if enter is pressed
+      ev.preventDefault();
+      if (isOTPComplete()) {
+        callback(retrieveOTP());
+      }
+    }
+    if (key == TAB_KEY && index == inputs.length - 1) {
+      // force submit if tab pressed on last input
+      ev.preventDefault();
+      if (isOTPComplete()) {
+        callback(retrieveOTP());
+      }
+    }
+  }
+
+  function onInput(index, ev) {
+    var value = ev.data || ev.target.value;
+    var curIndex = index;
+    for (i = 0; i < value.length; i++) {
+      if (i < inputs.length) {
+        if (!isDigit(value[i])) {
+          inputs[curIndex].value = "";
+          break;
+        }
+        inputs[curIndex++].value = value[i];
+        if (curIndex == inputs.length) {
+          if(isOTPComplete()) {
+            callback(retrieveOTP());
+          }
+        } else {
+          inputs[curIndex].focus();
+        }
+      }
+    }
+  }
+
+  function retrieveOTP() {
+    var otp = "";
+    for (i = 0; i < inputs.length; i++) {
+      otp += inputs[i].value;
+    }
+    return otp;
+  }
+
+  function isDigit(d) {
+    return d >= "0" && d <= "9";
+  }
+
+  function isOTPComplete() {
+    var isComplete = true;
+    var i = 0;
+    while (i < inputs.length && isComplete) {
+      if (inputs[i].value == "") {
+        isComplete = false;
+      }
+      i++;
+    }
+    return isComplete;
+  }
+
+  return {
+    init: init
+  };
+}
+
+var otpModule = otp("otp-inputs");
+otpModule.init(function(passcode) {});
+
+
+
+
+//       const $inp = $(".otp_input");
+//       $inp.on({
+//         paste(ev) { // Handle Pasting
+//     const clip = ev.originalEvent.clipboardData.getData('text').trim();
+//     // Allow numbers only
+//     if (!/\d{6}/.test(clip)) return ev.preventDefault(); // Invalid. Exit here
+//     // Split string to Array or characters
+//     const s = [...clip];
+//     // Populate inputs. Focus last input.
+//     $inp.val(i => s[i]).eq(5).focus(); 
+//   },
+//   input(ev) { 
+//     const i = $inp.index(this);
+//     if (ev.originalEvent.inputType === 'insertFromPaste') {
+//       const pasteText = ev.target.value;
+//       if (!/\d{6}/.test(pasteText)) {
+//         ev.preventDefault();
+//       } else {
+//         const s = [...pasteText];
+//         $inp.val(i => s[i]).eq(5).focus(); 
+//       }
+//     } else {
+//       if (this.value.length >= 1 && this.value.length < 6) $inp.eq(i + 1).focus();
+//     }
+//   },
+//   keydown(ev) { 
+//     const i = $inp.index(this);
+//     $(this).select();
+//     if (!this.value && ev.key === "Backspace" && i) $inp.eq(i - 1).focus();
+//   },
+//   click(ev) { 
+//     const i = $inp.index(this);
+//     $inp.eq(i).focus();
+//     // $(this).select();
+//   }
+// });
+
+
 // const $inp = $(".otp_input");
 //       $inp.on({
 //       paste(ev) { // Handle Pasting
