@@ -515,7 +515,7 @@ _________________________________________ */
 
 
         </div>
-        <div class="container">
+        <!-- <div class="container">
           <h1 class="h3 text-center font-weight-light mb-4">Enter your one time password:</h1>
           <form>
             <fieldset>
@@ -524,9 +524,9 @@ _________________________________________ */
                   <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" required>
                   <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
                   <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
-                <!-- </div>
+                </div>
                 <div class="input-group-seperator"></div>
-                <div class="input-group flex-nowrap"> -->
+                <div class="input-group flex-nowrap"> 
                   <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
                   <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
                   <input type="text" class="form-control form-control--otp js-otp-input" inputmode="numeric" pattern="[0-9]*" required>
@@ -534,7 +534,7 @@ _________________________________________ */
               </div>
             </fieldset>
           </form>
-        </div>
+        </div> -->
         <!-- <div class="otp_resend_msg">OTP Resend Attempt 1 of 3</div> -->
         <div class="otp_resend_msg">
           <p
@@ -1061,7 +1061,7 @@ var ZERO_KEY = 48;
 var NINE_KEY = 57;
 
 function otp(elementId) {
-  var inputs = document.querySelectorAll('.js-otp-input');
+  var inputs = document.querySelectorAll('.otp_input');
   var callback = null;
 
   function init(completeCallback) {
