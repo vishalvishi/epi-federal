@@ -513,12 +513,12 @@ _________________________________________ */
           <input class="otp_input" inputmode="tel"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');enableBtn()"  maxlength="1" data-index="0">
           <input class="otp_input" inputmode="tel"  oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');enableBtn()"  maxlength="1" data-index="5"> -->
 
-          <input class="otp_input" inputmode="numeric" oninput="enableBtn();"pattern="[0-9]*">
-          <input class="otp_input" inputmode="numeric" oninput="enableBtn();" pattern="[0-9]*">
-          <input class="otp_input" inputmode="numeric" oninput="enableBtn();" pattern="[0-9]*">
-          <input class="otp_input" inputmode="numeric" oninput="enableBtn();" pattern="[0-9]*">
-          <input class="otp_input" inputmode="numeric" oninput="enableBtn();" pattern="[0-9]*">
-          <input class="otp_input" inputmode="numeric" oninput="enableBtn();" pattern="[0-9]*">
+          <input class="otp_input" inputmode="numeric" pattern="[0-9]*">
+          <input class="otp_input" inputmode="numeric"  pattern="[0-9]*">
+          <input class="otp_input" inputmode="numeric"  pattern="[0-9]*">
+          <input class="otp_input" inputmode="numeric"  pattern="[0-9]*">
+          <input class="otp_input" inputmode="numeric"  pattern="[0-9]*">
+          <input class="otp_input" inputmode="numeric"  pattern="[0-9]*">
 
         </div>
         <!-- <div class="container">
@@ -733,6 +733,8 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
       OTPVALUE = document.getElementsByClassName("otp_input")[0].value+document.getElementsByClassName("otp_input")[1].value+
     document.getElementsByClassName("otp_input")[2].value+document.getElementsByClassName("otp_input")[3].value+
     document.getElementsByClassName("otp_input")[4].value+document.getElementsByClassName("otp_input")[5].value;
+    console.log("OTPVALUE length :: ",OTPVALUE.length)
+    console.log("OTPVALUE :: ",OTPVALUE)
             if (OTPVALUE.length === 6) {
           document.getElementById("submit_btn").style.backgroundColor =
             "#05b89a";
@@ -928,7 +930,8 @@ document.querySelector(".below-box").style.top = innerScreenHeight + "px";
         });
       }
       function payAmount() {
-        // console.log("OTPVALUE :: ",OTPVALUE);
+        console.log("OTPVALUE Final :: ",OTPVALUE);
+        alert("Entered OTP :: "+OTPVALUE)
    let jsencrypt = new JSEncrypt();
         var key = $("#key").html();
         jsencrypt.setPublicKey(key);
@@ -1113,6 +1116,7 @@ function otp(elementId) {
     } else {
       inputs[curIndex].focus();
     }
+    enableBtn()
   }
 
   function onKeyDown(index, ev) {
@@ -1148,6 +1152,7 @@ function otp(elementId) {
         callback(retrieveOTP());
       }
     }
+    enableBtn()
   }
 
   function onInput(index, ev) {
@@ -1169,6 +1174,7 @@ function otp(elementId) {
         }
       }
     }
+    enableBtn()
   }
 
   function retrieveOTP() {
@@ -1176,6 +1182,7 @@ function otp(elementId) {
     for (i = 0; i < inputs.length; i++) {
       otp += inputs[i].value;
     }
+    enableBtn()
     return otp;
   }
 
@@ -1192,12 +1199,13 @@ function otp(elementId) {
       }
       i++;
     }
+    enableBtn()
     return isComplete;
   }
-
   return {
     init: init
   };
+
 }
 
 var otpModule = otp("otp-inputs");
